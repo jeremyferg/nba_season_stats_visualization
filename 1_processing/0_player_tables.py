@@ -22,9 +22,7 @@ import time
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from nba_api.stats.endpoints import commonplayerinfo
-from nba_api.stats.endpoints import playercareerstats
-from nba_api.stats.endpoints import playerawards
+from nba_api.stats.endpoints import playerawards, playercareerstats, commonplayerinfo
 from concat_chunks import concat_json_to_csv
 
 output_path = "data/raw/player_scoreboard/player_ids.json"
