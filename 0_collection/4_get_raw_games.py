@@ -142,8 +142,8 @@ def games_extract(games_id_list, chunk_id=None, save_dir="data/raw/games"):
         'nationalBroadcasters_broadcasterDisplay': 'NAT_BROADACSTER_NAME',
         'homeTvBroadcasters_broadcasterId': 'HOME_BROADCASTER_ID',
         'homeTvBroadcasters_broadcasterDisplay': 'HOME_BROADACSTER_NAME',
-        'awayTvBroadcasters_broadcasterId': 'AWAY_BROADCASTER_ID',
-        'awayTvBroadcasters_broadcasterDisplay': 'AWAY_BROADACSTER_NAME'
+        'awayTvBroadcasters_broadcasterId': 'VISITOR_BROADCASTER_ID',
+        'awayTvBroadcasters_broadcasterDisplay': 'VISITOR_BROADACSTER_NAME'
     })
     # lower all the column names
     games_merged.columns = map(str.lower, games_merged.columns)

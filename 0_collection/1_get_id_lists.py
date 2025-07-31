@@ -22,7 +22,6 @@ import json
 import time
 import pandas as pd
 from tqdm import tqdm
-
 from nba_api.stats.static import players, teams
 from nba_api.stats.endpoints import leaguegamefinder
 
