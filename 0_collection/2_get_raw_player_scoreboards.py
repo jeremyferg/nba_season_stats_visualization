@@ -6,6 +6,10 @@
 ##########################################
 ##########################################
 
+# get basic statistics on box scores per game
+# the API endpoint needed requires player IDs whereas other related boxscores use
+    # game IDs, hence this is considered the raw/initial version of the table
+
 #############################################################################################################################
 
 ############################
