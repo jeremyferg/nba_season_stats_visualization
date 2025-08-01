@@ -4,3 +4,4 @@ The goal of this project is to use SQL and Tableau to create data visualizations
 
 - 0_collection: extracts the majority of the raw data needed to make SQL relational database
 - 1_processing: processes raw data into SQL tables
+- 2_sql_creation_querying: creates, populates, and queries SQL database
