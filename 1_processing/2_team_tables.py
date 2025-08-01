@@ -88,6 +88,25 @@ def team_info():
     'LEAGUE_ID'
     ], axis=1)
 
+    tot_row_df = pd.DataFrame([{
+        'TEAM_ID': 0, 
+        'TEAM_CITY': None,
+        'TEAM_NAME': 'Trade',
+        'START_YEAR': None,
+        'END_YEAR': None,
+        'YEARS': None,
+        'GAMES': None,
+        'WINS': None,
+        'LOSSES': None,
+        'WIN_PCT': None,
+        'PO_APPEARANCES': None,
+        'DIV_TITLES': None,
+        'CONF_TITLES': None,
+        'LEAGUE_TITLES': None}])
+
+    team_info = pd.concat([team_info, tot_row_df], ignore_index=True)
+    team_info.columns = map(str.lower, team_info.columns)
+
     return team_info
 
 #############################################################################################################################
@@ -143,6 +162,7 @@ def team_seasons():
     # drop columns, sort by team and season
     df = df.drop(columns=[col for col in df.columns if col.endswith('_RANK')])
     df = df.sort_values(by=['TEAM_ID', 'SEASON'], ignore_index=True)
+    df.columns = map(str.lower,df.columns)
 
     return df
 
@@ -305,6 +325,8 @@ def team_scoreboard():
 ###  MAIN  ###
 ###        ###
 ##############
+
+# script needs to be ran four times to fully finish
 
 def main():
 

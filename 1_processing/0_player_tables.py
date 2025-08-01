@@ -124,6 +124,7 @@ def player_info(player_ids):
         'GAMES_PLAYED_FLAG',
         'NBA_FLAG',
         'PLAYERCODE',
+        'TEAM_ID',
         'TEAM_CODE',
         'TEAM_NAME',
         'TEAM_ABBREVIATION',
