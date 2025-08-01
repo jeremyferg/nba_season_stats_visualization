@@ -81,10 +81,10 @@ broadcasters = pd.read_csv("data/processed/games/broadcasters.csv")
 #############################################################################################################################
 
 # replace credentials and connection info as needed
-username = ''
-password = ''
-host = ''
-database = ''
+username = 'root'
+password = 'zKq40Bnc!'
+host = 'localhost'
+database = 'nba_stats'
 
 # create engine
 engine = create_engine(f"mysql+pymysql://{username}:{password}@{host}/{database}")
