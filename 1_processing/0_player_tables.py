@@ -190,8 +190,8 @@ def player_season_career(player_ids):
     # drop and rename columns
     player_career = player_career.drop([
         'LEAGUE_ID',
-        'PLAYER_AGE',
-        'TEAM_ABBREVIATION'
+        'PLAYER_AGE'
+        
     ],
                     axis=1)
     player_career = player_career.rename({
@@ -215,7 +215,7 @@ def player_season_career(player_ids):
     'TEAM_ABBREVIATION': 'first',
     'GP': 'sum',
     'GS': 'sum',
-    'MIN': 'sum',
+    'MINUTES': 'sum',
     'FGM': 'sum',
     'FGA': 'sum',
     'FG_PCT': 'mean',
@@ -243,6 +243,15 @@ def player_season_career(player_ids):
     cols = list(player_career.columns)
     cols.insert(5, cols.pop(cols.index('NUM_YEARS')))
     player_career = player_career[cols]
+
+    player_season = player_season.drop([
+        'TEAM_ABBREVIATION'
+    ],
+                    axis=1)
+    player_career = player_career.drop([
+        'TEAM_ABBREVIATION'
+    ],
+                    axis=1)
 
     # lower all the column names
     player_season.columns = map(str.lower, player_season.columns)
@@ -384,7 +393,7 @@ def awards(player_ids):
 
 def player_scoreboard():
 
-    concat_json_to_csv("./data/raw/player_scoreboard", "./data/processed/player_scoreboard", "player_scoreboards.csv")
+    concat_json_to_csv("data/raw/player_scoreboard", "data/processed/player_scoreboard", "player_scoreboards.csv")
 
 #############################################################################################################################
 
