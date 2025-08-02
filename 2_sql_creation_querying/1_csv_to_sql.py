@@ -46,6 +46,7 @@ awards_1000 = pd.read_csv("data/processed/player_scoreboard/awards_1000.csv")
 awards_1500 = pd.read_csv("data/processed/player_scoreboard/awards_1500.csv")
 
 awards = pd.concat([awards_500, awards_1000, awards_1500], ignore_index=True)
+awards = awards.drop_duplicates(subset=['award_name'])
 
 # player_awards
 player_awards_500 = pd.read_csv("data/processed/player_scoreboard/player_awards_500.csv")
@@ -81,18 +82,18 @@ broadcasters = pd.read_csv("data/processed/games/broadcasters.csv")
 #############################################################################################################################
 
 # replace credentials and connection info as needed
-username = 'root'
-password = 'zKq40Bnc!'
-host = 'localhost'
-database = 'nba_stats'
+username = ''
+password = '!'
+host = ''
+database = ''
 
 # create engine
 engine = create_engine(f"mysql+pymysql://{username}:{password}@{host}/{database}")
 
 # get a list of the tables
 tables_list = [player_info, 
-               player_seasons, 
                player_career, 
+               player_seasons, 
                awards, 
                player_awards,
                player_scoreboards,

@@ -44,7 +44,7 @@ CREATE TABLE player_career(
     gp SMALLINT UNSIGNED NOT NULL,
     gs SMALLINT UNSIGNED NOT NULL,
     num_years TINYINT UNSIGNED NOT NULL,
-    min INT UNSIGNED NOT NULL,
+    minutes INT UNSIGNED NOT NULL,
     fgm SMALLINT UNSIGNED NOT NULL,
     fga SMALLINT UNSIGNED NOT NULL,
     fg_pct DECIMAL(4,3) NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE player_seasons(
     team_id INT UNSIGNED NOT NULL,
     gp SMALLINT UNSIGNED NOT NULL,
     gs SMALLINT UNSIGNED NOT NULL,
-    min INT UNSIGNED NOT NULL,
+    minutes INT UNSIGNED NOT NULL,
     fgm SMALLINT UNSIGNED NOT NULL,
     fga SMALLINT UNSIGNED NOT NULL,
     fg_pct DECIMAL(4,3) NOT NULL,
@@ -116,7 +116,6 @@ CREATE TABLE player_awards(
 
 CREATE TABLE player_scoreboards(
     player_id INT UNSIGNED NOT NULL,
-    team_abr VARCHAR(3) NOT NULL,
     game_id int UNSIGNED NOT NULL,
     game_date DATE NOT NULL,
     matchup VARCHAR(20) NOT NULL,
@@ -140,7 +139,7 @@ CREATE TABLE player_scoreboards(
     blk TINYINT UNSIGNED NOT NULL,
     pf TINYINT UNSIGNED NOT NULL,
     plus_minus TINYINT NOT NULL,
-    min SMALLINT UNSIGNED NOT NULL,
+    minutes SMALLINT UNSIGNED NOT NULL,
     speed FLOAT NOT NULL,
     distance FLOAT NOT NULL,
     reb_chances_off TINYINT UNSIGNED NOT NULL,
@@ -211,8 +210,7 @@ CREATE TABLE team_info(
 
 CREATE TABLE team_seasons(
     team_id INT UNSIGNED NOT NULL,
-    team_name VARCHAR(50) NOT NULL,
-    season VARCHAR(10) NOT NULL,
+    season_id VARCHAR(10) NOT NULL,
     gp TINYINT UNSIGNED NOT NULL,
     w TINYINT UNSIGNED NOT NULL,
     l TINYINT UNSIGNED NOT NULL,
@@ -325,7 +323,7 @@ CREATE TABLE lineups(
     w SMALLINT UNSIGNED NOT NULL,
     l SMALLINT UNSIGNED NOT NULL,
     win_pct DECIMAL(4, 3) NOT NULL,
-    min FLOAT(2) NOT NULL,
+    minutes FLOAT(2) NOT NULL,
     fgm SMALLINT UNSIGNED NOT NULL,
     fga SMALLINT UNSIGNED NOT NULL,
     fg_pct DECIMAL(4, 3) NOT NULL,
@@ -344,6 +342,7 @@ CREATE TABLE lineups(
     blka SMALLINT UNSIGNED NOT NULL,
     pf SMALLINT UNSIGNED NOT NULL,
     pfd SMALLINT UNSIGNED NOT NULL,
+    pts SMALLINT UNSIGNED NOT NULL,
     plus_minus TINYINT NOT NULL,
     off_rating FLOAT NOT NULL,
     def_rating FLOAT NOT NULL,
@@ -376,6 +375,13 @@ CREATE TABLE lineups(
 ---               ---
 ---------------------
 
+CREATE TABLE arenas(
+    arena_id TINYINT UNSIGNED PRIMARY KEY NOT NULL,
+    arena_name VARCHAR(100),
+    arena_city VARCHAR(100),
+    arena_state VARCHAR(2)
+);
+
 CREATE TABLE games(
     game_id INT UNSIGNED PRIMARY KEY NOT NULL,
     game_date DATE NOT NULL,
@@ -390,13 +396,6 @@ CREATE TABLE games(
     outcome VARCHAR(10) NOT NULL
     FOREIGN KEY arena_id REFERENCES arenas(arena_id),
     FOREIGN KEY (nat_broadcaster_id, home_broadcaster_id, away_broadcaster_id) REFERENCES broadcasters(broadcaster_id, broadcaster_id, broadcaster_id)
-);
-
-CREATE TABLE arenas(
-    arena_id TINYINT UNSIGNED PRIMARY KEY NOT NULL,
-    arena_name VARCHAR(100),
-    arena_city VARCHAR(100),
-    arena_state VARCHAR(2)
 );
 
 CREATE TABLE broadcasters(
