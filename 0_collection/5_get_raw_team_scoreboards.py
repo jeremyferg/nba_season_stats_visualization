@@ -141,7 +141,6 @@ def team_scoreboards(games_id_list, chunk_id=None, save_dir="data/raw/team_score
         "SEASON_ID",
         "TEAM_NAME",
         "TEAM_ABBREVIATION",
-        "MIN",
         "gameId",
         "teamId",
         "assists",
@@ -150,6 +149,7 @@ def team_scoreboards(games_id_list, chunk_id=None, save_dir="data/raw/team_score
         "teamName_x",
         "teamTricode_x",
         "teamSlug_x",
+        "minutes_x",
         "minutes_y",
         "teamCity_y",
         "teamName_y",
@@ -161,7 +161,7 @@ def team_scoreboards(games_id_list, chunk_id=None, save_dir="data/raw/team_score
                                     axis=1)
     team_games = team_games.rename({
         "WL": "WINLOSE",
-        "minutes_x": "MINUTES",
+        "MIN": "MINUTES",
         "speed": "SPEED",
         "distance": "DISTANCE",
         "reboundChancesOffensive": "REB_CHANCES_OFF",
