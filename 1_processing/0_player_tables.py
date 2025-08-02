@@ -309,6 +309,8 @@ def awards(player_ids):
     ]
     # drop irrelevant columns
     player_awards = player_awards.drop([
+        'FIRST_NAME',
+        'LAST_NAME',
         'ALL_NBA_TEAM_NUMBER',
         'CONFERENCE',
         'TYPE',
@@ -355,7 +357,8 @@ def awards(player_ids):
     # drop descriptions, they are no longer needed 
     player_awards = player_awards.drop([
         'DESCRIPTION',
-        'AWARD_NAME'
+        'AWARD_NAME',
+        'TEAM'
 
     ],
                                        axis=1)

@@ -118,7 +118,7 @@ def games():
                                 'home_broadcaster_id',
                                 'visitor_broadcaster_id',
                                 'home_team_pts',
-                                'visitor_team__pts',
+                                'visitor_team_pts',
                                 'outcome'
                                  ]]
 

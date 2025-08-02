@@ -78,15 +78,19 @@ def team_info():
 
     # drop the unnecessary columns
     team_info = team_info.drop([
-    'id',
-    'full_name',
-    'abbreviation',
-    'nickname',
-    'city',
-    'state',
-    'year_founded',
-    'LEAGUE_ID'
-    ], axis=1)
+        'id',
+        'full_name',
+        'abbreviation',
+        'nickname',
+        'city',
+        'state',
+        'year_founded',
+        'LEAGUE_ID'
+        ], axis=1)
+    team_info = team_info.rename({
+        'PO_APPEARANCES': 'PLAYOFF_BERTHS',
+        'LEAGUE_TITLES': 'CHAMPIONSHIPS'
+    }, axis=1)
 
     tot_row_df = pd.DataFrame([{
         'TEAM_ID': 0, 
@@ -99,10 +103,10 @@ def team_info():
         'WINS': None,
         'LOSSES': None,
         'WIN_PCT': None,
-        'PO_APPEARANCES': None,
+        'PLAYOFF_BERTHS': None,
         'DIV_TITLES': None,
         'CONF_TITLES': None,
-        'LEAGUE_TITLES': None}])
+        'CHAMPIONSHIPS': None}])
 
     team_info = pd.concat([team_info, tot_row_df], ignore_index=True)
     team_info.columns = map(str.lower, team_info.columns)
@@ -121,7 +125,7 @@ def team_info():
 # table colums:
     ## TEAM_ID			## FTA																							
     ## TEAM_NAME	    ## FT_PCT
-    ## SEASON	        ## OREB
+    ## SEASON_ID	    ## OREB
     ## GP	            ## DREB
     ## W		        ## REB
     ## L	            ## AST
@@ -161,6 +165,9 @@ def team_seasons():
 
     # drop columns, sort by team and season
     df = df.drop(columns=[col for col in df.columns if col.endswith('_RANK')])
+    df = df.drop(['TEAM_NAME'], axis=1)
+    df = df.rename({'SEASON': 'SEASON_ID',
+                    'W_PCT': 'WIN_PCT'}, axis=1)
     df = df.sort_values(by=['TEAM_ID', 'SEASON'], ignore_index=True)
     df.columns = map(str.lower,df.columns)
 
@@ -212,6 +219,10 @@ def lineups(teams_id):
                     'GROUP_SET',
                     'TEAM_ABBREVIATION'
                 ], axis=1)
+                lineup_basic = lineup_basic.rename({
+                    'MIN': 'MINUTES',
+                    'W_PCT': 'WIN_PCT'
+                }, axis=1)
 
                 split_cols = lineup_basic["GROUP_ID"].str.findall(r'\d+')
                 split_df = pd.DataFrame(split_cols.tolist(), columns=[f"PLAYER_{i}" for i in range(split_cols.str.len().max())+1])
@@ -254,6 +265,10 @@ def lineups(teams_id):
                     'GROUP_SET',
                     'TEAM_ABBREVIATION'
                 ], axis=1)
+                lineup_basic = lineup_basic.rename({
+                    'MIN': 'MINUTES',
+                    'W_PCT': 'WIN_PCT'
+                }, axis=1)
 
                 split_cols = lineup_basic["GROUP_ID"].str.findall(r'\d+')
                 split_df = pd.DataFrame(split_cols.tolist(), columns=[f"PLAYER_{i}" for i in range(split_cols.str.len().max())])
@@ -267,6 +282,10 @@ def lineups(teams_id):
                     'TEAM_ABBREVIATION',
                     'MIN'
                 ], axis=1)
+                lineup_advanced = lineup_advanced.rename({
+                    "TM_AST_PCT": "TEAM_AST_PCT",
+                    "PCT_PTS_2PT_MR": "PCT_PTS_MR"
+                }, axis=1)
 
                 lineup_merged = pd.merge(
                     lineup_basic, 
