@@ -83,7 +83,7 @@ broadcasters = pd.read_csv("data/processed/games/broadcasters.csv")
 
 # replace credentials and connection info as needed
 username = ''
-password = '!'
+password = ''
 host = ''
 database = ''
 
@@ -91,19 +91,21 @@ database = ''
 engine = create_engine(f"mysql+pymysql://{username}:{password}@{host}/{database}")
 
 # get a list of the tables
-tables_list = [player_info, 
-               player_career, 
-               player_seasons, 
-               awards, 
-               player_awards,
-               player_scoreboards,
-               team_info,
-               team_seasons,
-               team_scoreboards,
-               lineups,
-               arenas,
-               games,
-               broadcasters]
+tables_list = [
+    ("player_info", player_info),
+    ("player_career", player_career),
+    ("player_seasons", player_seasons),
+    ("awards", awards),
+    ("player_awards", player_awards),
+    ("player_scoreboards", player_scoreboards),
+    ("team_info", team_info),
+    ("team_seasons", team_seasons),
+    ("team_scoreboards", team_scoreboards),
+    ("lineups", lineups),
+    ("arenas", arenas),
+    ("games", games),
+    ("broadcasters", broadcasters)
+]
 # populate the SQL tables with the CSV files
-for table in tables_list:
-    table.to_sql(table.__name__, con=engine, if_exists='append', index=False)
+for table_name, table in tables_list:
+    table.to_sql(table_name, con=engine, if_exists='append', index=False)
