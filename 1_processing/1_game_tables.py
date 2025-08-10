@@ -70,7 +70,7 @@ def arenas():
 
     # drop duplicates and add an ID column
     arenas_df = arenas_df.drop_duplicates()
-    arenas_df = arenas_df.dropna(how='all')
+    arenas_df = arenas_df[arenas_df['arena_id']=='40']
     arenas_df = arenas_df.reset_index(drop=True)
     arenas_df.insert(0, "arena_id", arenas_df.index)
     

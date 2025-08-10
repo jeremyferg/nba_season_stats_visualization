@@ -302,6 +302,8 @@ def lineups(teams_id):
 
     # make a proper id column for groups
     df['GROUP_ID'] = pd.factorize(df['GROUP_ID'])[0]
+    df['GROUP_ID'] = range(len(df))
+
 
     # lower all the column names
     df.columns = map(str.lower, df.columns)
