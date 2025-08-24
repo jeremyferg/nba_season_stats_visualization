@@ -146,8 +146,8 @@ def player_info(player_ids):
     },
                     axis=1)
     # change the formatting of birthdate
-    player_info["BIRTHDATE"] = pd.to_datetime(player_info["BIRTHDATE"], errors='coerce')
-    player_info['BIRTHDATE'] = player_info['BIRTHDATE'].dt.strftime('%m-%d-%Y')
+    player_info["BIRTHDATE"] = pd.to_datetime(player_info["BIRTHDATE"], format="%m-%d-%Y", errors="coerce")
+    player_info["BIRTHDATE"] = player_info["BIRTHDATE"].dt.date
 
     # lower all the column names
     player_info.columns = map(str.lower, player_info.columns)
@@ -198,6 +198,7 @@ def player_season_career(player_ids):
         'MIN': 'MINUTES'
     },
                     axis=1)
+    player_career = player_career[player_career['team_id']!=1610610023] 
 
     # copy a column for player seasons
     player_season = player_career.copy()
@@ -408,10 +409,13 @@ def player_scoreboard():
 
 def main():
 
-    # split player ID list into three parts to avoid the API from completely timing out
-    # script needs to be ran nine times to fully finish
+    if not os.path.exists("data/processed/player_scoreboard/player_scoreboards.csv"):
+        player_scoreboard()
 
-    if not os.path.exists("data/processed/player_scoreboard/player_info_500.csv"):
+    # split player ID list into three parts to avoid the API from completely timing out
+    # script needs to be ran nine more times to fully finish
+
+    elif not os.path.exists("data/processed/player_scoreboard/player_info_500.csv"):
         print("Building player info table (1-500).")
         player_info_df = player_info(player_ids[:500])       
         player_info_df.to_csv("data/processed/player_scoreboard/player_info_500.csv", index=False)

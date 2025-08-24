@@ -347,11 +347,14 @@ def team_scoreboard():
 ###        ###
 ##############
 
-# script needs to be ran four times to fully finish
+# script needs to be ran five times to fully finish
 
 def main():
 
-    if not os.path.exists("data/processed/team_scoreboard/team_info.csv"):
+    if not os.path.exists("data/processed/team_scoreboard/team_scoreboards.csv"):
+        team_scoreboard()
+
+    elif not os.path.exists("data/processed/team_scoreboard/team_info.csv"):
         print("Building team info table.")
         team_info_df = team_info()
         team_info_df.to_csv("data/processed/team_scoreboard/team_info.csv", index=False)
