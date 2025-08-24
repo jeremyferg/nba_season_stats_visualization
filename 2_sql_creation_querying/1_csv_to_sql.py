@@ -82,7 +82,7 @@ broadcasters = pd.read_csv("data/processed/games/broadcasters.csv")
 
 #############################################################################################################################
 
-# replace credentials and connection info as needed
+## replace credentials and connection info as needed
 username = ''
 password = ''
 host = ''
