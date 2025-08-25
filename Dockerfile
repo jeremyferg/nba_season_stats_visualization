@@ -2,6 +2,8 @@ FROM apache/superset:latest
 
 RUN pip install pymysql
 
+COPY superset_config.py /app/pythonpath/
+
 EXPOSE 8088
 
 CMD superset db upgrade && \
