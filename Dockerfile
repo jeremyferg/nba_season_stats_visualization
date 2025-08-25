@@ -1,12 +1,17 @@
 FROM apache/superset:latest
 
+# Install MySQL driver
 RUN pip install pymysql
 
+# Copy Superset config
 COPY superset_config.py /app/pythonpath/
 
 EXPOSE 8088
 
+# Initialize Superset and create admin if not exists
 CMD superset db upgrade && \
+    superset init && \
+    # Create admin user only if it doesn't exist
     superset fab create-admin \
         --username admin \
         --firstname Superset \
@@ -14,5 +19,4 @@ CMD superset db upgrade && \
         --email admin@example.com \
         --password admin \
         --role Admin || true && \
-    superset init && \
     superset run -h 0.0.0.0 -p 8088
