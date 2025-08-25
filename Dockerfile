@@ -1,7 +1,7 @@
 FROM apache/superset:latest
 
-# Install MySQL driver
-RUN pip install pymysql
+# Install MySQL driver and pillow
+RUN pip install pymysql pillow
 
 # Copy Superset config
 COPY superset_config.py /app/pythonpath/
