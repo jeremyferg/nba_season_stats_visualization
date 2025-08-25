@@ -1,10 +1,16 @@
 FROM apache/superset:latest
 
-# Optional: pre-install Python packages you need
-# RUN pip install psycopg2-binary mysqlclient
+RUN pip install pymysql
 
-# Superset runs on port 8088 by default
 EXPOSE 8088
 
-# Start Superset
-CMD ["superset", "run", "-p", "8088", "-h", "0.0.0.0"]
+CMD superset db upgrade && \
+    superset fab create-admin \
+        --username admin \
+        --firstname Superset \
+        --lastname Admin \
+        --email admin@example.com \
+        --password admin \
+        --role Admin || true && \
+    superset init && \
+    superset run -h 0.0.0.0 -p 8088
