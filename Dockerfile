@@ -1,26 +1,22 @@
 # Use official Superset image
 FROM apache/superset:latest
 
-# Install PyMySQL and Pillow inside the virtualenv
-USER root
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        libjpeg-dev \
-        zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Install MySQL driver (for Aiven metadata) and Pillow (optional, for screenshots)
+RUN pip install pymysql pillow
 
-# Switch back to superset user
-USER superset
-
-# Activate virtualenv and install Python packages
-RUN . /app/.venv/bin/activate && \
-    pip install --no-cache-dir pymysql pillow
-
-# Copy your Superset config
+# Copy your local Superset configuration
 COPY superset_config.py /app/pythonpath/
 
-# Expose default port
+# Expose the default Superset port
 EXPOSE 8088
 
-# Start Superset
-CMD ["/bin/bash", "-c", ". /app/.venv/bin/activate && superset db upgrade && superset init && superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@example.com --password admin && superset run -h 0.0.0.0 -p 8088"]
-
+# Start Superset: upgrade DB, init, create admin, run server
+CMD superset db upgrade && \
+    superset init && \
+    superset fab create-admin \
+        --username admin \
+        --firstname Superset \
+        --lastname Admin \
+        --email admin@example.com \
+        --password admin && \
+    superset run -h 0.0.0.0 -p 8088
