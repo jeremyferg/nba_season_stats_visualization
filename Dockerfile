@@ -1,10 +1,8 @@
-# Use official Superset image
 FROM apache/superset:latest
 
-# Switch to root to install system packages
 USER root
 
-# Install MySQL client libraries
+# Install system dependencies for MySQL driver
 RUN apt-get update && \
     apt-get install -y default-libmysqlclient-dev build-essential && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -12,13 +10,12 @@ RUN apt-get update && \
 # Switch back to superset user
 USER superset
 
-# Install Python packages inside Superset's venv
+# Install Python packages inside Superset's virtualenv
 RUN . .venv/bin/activate && pip install --no-cache-dir pymysql pillow
 
-# Copy your local Superset configuration (optional)
+# Copy your Superset config
 COPY superset_config.py /app/pythonpath/
 
-# Expose default Superset port
 EXPOSE 8088
 
 # Start Superset
@@ -31,5 +28,3 @@ CMD superset db upgrade && \
         --email admin@example.com \
         --password admin && \
     superset run -h 0.0.0.0 -p 8088
-
-
