@@ -1,8 +1,8 @@
 # Use official Superset image
 FROM apache/superset:latest
 
-# Install MySQL driver (for Aiven metadata) and Pillow (optional, for screenshots)
-RUN pip install pymysql pillow
+# Install MySQL driver (for connecting to your NBA DB in Aiven) + Pillow (screenshots)
+RUN pip install mysqlclient pymysql pillow
 
 # Copy your local Superset configuration
 COPY superset_config.py /app/pythonpath/
