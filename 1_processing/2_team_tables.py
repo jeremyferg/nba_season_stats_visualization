@@ -183,21 +183,21 @@ def team_seasons():
 
 # collects and creates a Lineups table
 # table colums:
-    ## GROUP_ID			## FGA          ##	BLKA            ##	PCT_PTS_FB																																							
+    ## SEASON			## FGM          ##	BLK             ##	PCT_PTS_MR																																							
+    ## GROUP_ID	        ## FGA          ##	BLKA            ##	PCT_PTS_FB
     ## GROUP_NAME	    ## FG_PCT       ##	PF              ##	PCT_PTS_FT
     ## PLAYER_0	        ## FG3M         ##	PFD             ##	PCT_PTS_PAINT
-    ## PLAYER_1	        ## FG3A         ##	PTS             ##	PCT_AST_FGM
-    ## PLAYER_2		    ## FG3_PCT      ##	PLUS_MINUS      ##	PCT_UAST_FGM
+    ## PLAYER_1		    ## FG3A         ##	PTS             ##	PCT_AST_FGM
+    ## PLAYER_2	        ## FG3_PCT      ##	PLUS_MINUS      ##	PCT_UAST_FGM
     ## PLAYER_3	        ## FTM          ##	OFF_RATING      ##	OPP_FG3_PCT
     ## PLAYER_4	        ## FTA          ##	DEF_RATING      ##	OPP_FTA_RATE
-    ## TEAM_ID	        ## FT_PCT       ##	NET_RATING      ##	OPP_TOV_PCT
-    ## GP	            ## OREB         ##	PACE
-    ## W	            ## DREB         ##	TS_PCT        
+    ## TEAM_ID	        ## FT_PCT       ##	NET_RATING      ##  OPP_TOV_PCT
+    ## GP	            ## OREB         ##	PACE            ##  SUM_TIME_PLAYED
+    ## W	            ## DREB         ##	TS_PCT
     ## L	            ## REB          ##	FTA_RATE
-    ## W_PCT	        ## AST          ##	TEAM_AST_PCT
+    ## W_PCT            ## AST          ##	TEAM_AST_PCT
     ## MIN              ## TOV          ##	PCT_FGA_2PT
     ## FG3_PCT          ## STL          ##	PCT_FGA_3PT
-    ## FGM              ## BLK          ##	PCT_PTS_MR
 
 def lineups(teams_id):
 
@@ -225,7 +225,7 @@ def lineups(teams_id):
                 }, axis=1)
 
                 split_cols = lineup_basic["GROUP_ID"].str.findall(r'\d+')
-                split_df = pd.DataFrame(split_cols.tolist(), columns=[f"PLAYER_{i}" for i in range(split_cols.str.len().max())+1])
+                split_df = pd.DataFrame(split_cols.tolist(), columns=[f"PLAYER_{i+1}" for i in range(split_cols.str.len().max())])
                 lineup_basic = pd.concat([lineup_basic.iloc[:, :2], split_df, lineup_basic.iloc[:, 2:]], axis=1)
             
                 
@@ -234,7 +234,8 @@ def lineups(teams_id):
                 lineup_advanced = lineup_advanced.drop([
                     'TEAM_ID',
                     'TEAM_ABBREVIATION',
-                    'MIN'
+                    'MIN',
+                    'SUM_TM_MIN'
                 ], axis=1)
                 lineup_advanced = lineup_advanced.rename({
                     "TM_AST_PCT": "TEAM_AST_PCT",
@@ -246,15 +247,16 @@ def lineups(teams_id):
                     lineup_advanced, 
                     on=['GROUP_ID', 'GROUP_NAME'],
                     how="left")
+                lineup_merged['SEASON'] = season
 
-                df = pd.concat([df, lineup_merged], ignore_index=True)
+                df = pd.concat([df, lineup_merged], ignore_index=True) 
 
             except Exception as e:
                 print(f"Failed to fetch team {team_id}: {e}")
                 failed.append([team_id, season])
                 time.sleep(.4)  # Wait a bit longer after a failure
 
-    for grouping in tqdm(failed, desc="Fetching seasons"):
+    for grouping in tqdm(failed, desc="Fetching failed team lineups"):
         attempts = 0
         while attempts < 2:
             try:
@@ -271,7 +273,7 @@ def lineups(teams_id):
                 }, axis=1)
 
                 split_cols = lineup_basic["GROUP_ID"].str.findall(r'\d+')
-                split_df = pd.DataFrame(split_cols.tolist(), columns=[f"PLAYER_{i}" for i in range(split_cols.str.len().max())])
+                split_df = pd.DataFrame(split_cols.tolist(), columns=[f"PLAYER_{i+1}" for i in range(split_cols.str.len().max())])
                 lineup_basic = pd.concat([lineup_basic.iloc[:, :2], split_df, lineup_basic.iloc[:, 2:]], axis=1)
         
             
@@ -280,7 +282,8 @@ def lineups(teams_id):
                 lineup_advanced = lineup_advanced.drop([
                     'TEAM_ID',
                     'TEAM_ABBREVIATION',
-                    'MIN'
+                    'MIN',
+                    'SUM_TM_MIN'
                 ], axis=1)
                 lineup_advanced = lineup_advanced.rename({
                     "TM_AST_PCT": "TEAM_AST_PCT",
@@ -292,6 +295,7 @@ def lineups(teams_id):
                     lineup_advanced, 
                     on=['GROUP_ID', 'GROUP_NAME'],
                     how="left")
+                lineup_merged['SEASON'] = season
 
                 df = pd.concat([df, lineup_merged], ignore_index=True)
 
@@ -304,6 +308,8 @@ def lineups(teams_id):
     df['GROUP_ID'] = pd.factorize(df['GROUP_ID'])[0]
     df['GROUP_ID'] = range(len(df))
 
+    col = df.pop('SEASON') 
+    df.insert(0, 'SEASON', col) 
 
     # lower all the column names
     df.columns = map(str.lower, df.columns)
@@ -374,7 +380,7 @@ def main():
             lineups_df_2 = lineups(teams_id=team_ids_list[15:])
             lineups_df = pd.read_csv("data/processed/team_scoreboard/lineups.csv")
             lineups_df = pd.concat([lineups_df, lineups_df_2], ignore_index=True)
-            lineups_df.to_csv("data/processed/team_scorebord/lineups.csv", index=False)
+            lineups_df.to_csv("data/processed/team_scoreboard/lineups.csv", index=False)
 
             print("All team information extracted.")
         

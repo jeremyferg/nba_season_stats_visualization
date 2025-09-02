@@ -357,7 +357,8 @@ CREATE TABLE team_scoreboards(
 );
 
 CREATE TABLE lineups(
-    group_id INT UNSIGNED PRIMARY KEY NOT NULL,
+    season VARCHAR(10) NOT NULL,
+    group_id INT UNSIGNED NOT NULL,
     group_name VARCHAR(250),
     player_1 INT UNSIGNED NOT NULL,
     player_2 INT UNSIGNED NOT NULL,
@@ -410,6 +411,8 @@ CREATE TABLE lineups(
     opp_efg_pct DECIMAL(4, 3),
     opp_fta_rate FLOAT,
     opp_tov_pct TINYINT UNSIGNED,
+    sum_time_played INT UNSIGNED,
+    PRIMARY KEY (season, group_id),
     FOREIGN KEY (player_1) REFERENCES player_info(player_id),
 	FOREIGN KEY (player_2) REFERENCES player_info(player_id),
 	FOREIGN KEY (player_3) REFERENCES player_info(player_id),
